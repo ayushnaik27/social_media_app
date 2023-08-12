@@ -23,6 +23,7 @@ class _HomePageState extends State<HomePage> {
         'email': currentUser.email,
         'message': _postTextController.text,
         'TimeStamp': Timestamp.now(),
+        'Likes': [] 
       });
       //clear textController
       _postTextController.clear();
@@ -60,6 +61,9 @@ class _HomePageState extends State<HomePage> {
                       return PostTile(
                         email: post['email'],
                         message: post['message'],
+                        postId: post.id,
+                        likes: List<String>.from(post['Likes']?? []),
+                        
                       );
                     },
                   );
