@@ -10,7 +10,7 @@ class MyButton extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10),
       child: ElevatedButton(
-        onPressed: () {},
+        onPressed: onTap,
     
         style: ButtonStyle(
     
