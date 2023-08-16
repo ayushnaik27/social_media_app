@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:social_media_app/widgets/button.dart';
@@ -33,9 +34,21 @@ class _SignupPageState extends State<SignupPage> {
     }
     //try creating the user
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      //creating user
+      final UserCredential userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emailTextController.text,
           password: _passwordTextController.text);
+
+      
+      //after creating user set username and bio
+      FirebaseFirestore.instance.collection("Users").doc(userCredential.user!.email).set({
+        'username': _emailTextController.text.split('@')[0],//initial username
+        'bio':'Empty bio...' // empty bio at start
+        // add anything you want
+
+      });
+
+
       if (context.mounted) Navigator.pop(context);
     } on FirebaseAuthException catch (error) {
       displayMessage(error.message.toString());

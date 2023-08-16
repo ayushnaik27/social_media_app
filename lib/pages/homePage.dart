@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:social_media_app/widgets/postTile.dart';
+
+
+import '/widgets/drawer.dart';
+import '/widgets/postTile.dart';
+import 'profilePage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -30,9 +34,22 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  void goToProfile(){
+    //pop menu drawer
+    Navigator.pop(context);
+
+    //go to profile page
+    Navigator.push(context, MaterialPageRoute(builder: (ctx)=> ProfilePage()));
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: MyDrawer(
+        onProfileTap: goToProfile,
+        onSignOut: signOut,
+      ),
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         backgroundColor: Colors.black,
