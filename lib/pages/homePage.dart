@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:social_media_app/helper/helper_methods.dart';
 
 import '/widgets/drawer.dart';
 import '/widgets/postTile.dart';
@@ -27,20 +27,19 @@ class _HomePageState extends State<HomePage> {
         'email': currentUser.email,
         'message': _postTextController.text,
         'TimeStamp': Timestamp.now(),
-        'Likes': [] 
+        'Likes': []
       });
       //clear textController
       _postTextController.clear();
     }
   }
 
-  void goToProfile(){
+  void goToProfile() {
     //pop menu drawer
     Navigator.pop(context);
 
     //go to profile page
-    Navigator.push(context, MaterialPageRoute(builder: (ctx)=> ProfilePage()));
-    
+    Navigator.push(context, MaterialPageRoute(builder: (ctx) => ProfilePage()));
   }
 
   @override
@@ -53,7 +52,10 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: const Text('Socials',style: TextStyle(fontSize: 25),),
+        title: const Text(
+          'Socials',
+          style: TextStyle(fontSize: 25),
+        ),
         centerTitle: true,
         actions: [
           IconButton(onPressed: signOut, icon: const Icon(Icons.exit_to_app))
@@ -67,7 +69,7 @@ class _HomePageState extends State<HomePage> {
                 child: StreamBuilder(
               stream: FirebaseFirestore.instance
                   .collection("User Posts")
-                  .orderBy("TimeStamp",descending: true)
+                  .orderBy("TimeStamp", descending: true)
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
@@ -76,11 +78,12 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (context, index) {
                       final post = snapshot.data!.docs[index];
                       return PostTile(
-                        email: post['email'],
+                        // email: post['email'],
                         message: post['message'],
                         postId: post.id,
-                        likes: List<String>.from(post['Likes']?? []),
-                        
+                        time: formatDate(post['TimeStamp']),
+                        user: post['email'],
+                        likes: List<String>.from(post['Likes'] ?? []),
                       );
                     },
                   );
@@ -96,21 +99,22 @@ class _HomePageState extends State<HomePage> {
 
             //post textfield
             Padding(
-              padding: const EdgeInsets.only(right: 25,left: 25,bottom: 25,top: 10),
+              padding: const EdgeInsets.only(
+                  right: 25, left: 25, bottom: 25, top: 10),
               child: Row(
                 children: [
                   Expanded(
                     child: TextField(
                       autofocus: false,
-                      
                       controller: _postTextController,
                       decoration: const InputDecoration(
-                        hintText: 'Enter a message to post',
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black)),
-                        enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.black))
-                      ),
+                          hintText: 'Enter a message to post',
+                          filled: true,
+                          fillColor: Colors.white,
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black)),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.black))),
                     ),
                   ),
                   IconButton(

@@ -7,14 +7,17 @@ class LikeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: onTap,
-      icon: isLiked
+    return GestureDetector(
+      onTap: onTap,
+      child: isLiked
           ? const Icon(
+              color: Colors.redAccent,
               Icons.favorite,
             )
-          : const Icon(Icons.favorite_border),
-      color: isLiked? Colors.redAccent : Colors.grey,
+          : const Icon(
+              Icons.favorite_border,
+              color: Colors.grey,
+            ),
     );
   }
 }
